@@ -18,7 +18,7 @@ Portkey is a middleware solution that adds observability & production capabiliti
 - And more..
 
 
-![Portkey Dashboard](image.png)
+![Portkey Dashboard](./portkey-dashboard.png)
 
 >**This guide covers how to integrate Portkey in your Langchain apps.**
 
@@ -27,7 +27,7 @@ Portkey is a middleware solution that adds observability & production capabiliti
 2. On your [Portkey dashboard](https://app.portkey.ai/), click on your profile icon on the top left.
 3. Click on "Copy API Key".
 
-![API Key](image-1.png)
+![API Key](./portkey-api-key.png)
 
 ## Integrating with Langchain
 
