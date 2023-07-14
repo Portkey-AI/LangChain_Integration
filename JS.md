@@ -36,8 +36,8 @@ Portkey does not require any package installation or config changes - it works o
 ### 2-Step To Add Portkey:
 
 **1️⃣ Change OpenAI API base to Portkey proxy**
-```py
-os.environ["OPENAI_API_BASE"] = "https://api.portkey.ai/v1/proxy"
+```ts
+ configuration: {basePath: "https://api.portkey.ai/v1/proxy",}
 ```
 
 **2️⃣ Pass Portkey related headers direct to your OpenAI call**
@@ -45,7 +45,6 @@ os.environ["OPENAI_API_BASE"] = "https://api.portkey.ai/v1/proxy"
   - `x-portkey-api-key` and ,
   - `x-portkey-mode`
 - You can enable other Portkey features by adding their relevant headers as described below.
-
 
 | Feature | Portkey Header | Value (Type) |
 | -- | -- | -- |
@@ -60,36 +59,30 @@ os.environ["OPENAI_API_BASE"] = "https://api.portkey.ai/v1/proxy"
 
 ### Enabling all Portkey features:
 
-```py
-import json
-import os
-from langchain.llms import OpenAI
+```ts
+import { OpenAI } from "langchain/llms/openai";
 
-os.environ["OPENAI_API_BASE"] = "https://api.portkey.ai/v1/proxy"
-os.environ["OPENAI_API_KEY"] = "<OPENAI_API_KEY>"
-portkey_api = "<PORTKEY_API_KEY>"
+const model = new OpenAI({
+  modelName: "text-davinci-003", 
+  temperature: 0.9,
+  openAIApiKey: "<OPENAI_API_KEY>",
+  configuration: {
+    basePath: "https://api.portkey.ai/v1/proxy",
+    baseOptions: {
+      headers: {
+        'x-portkey-api-key': '<PORTKEY_API_KEY>',
+        'x-portkey-mode': 'proxy openai',
+        'x-portkey-trace-id' : 'langchain_demo'
+      }
+    }
+  }
+});
 
-portkey_headers = {
-    "x-portkey-api-key": portkey_api,
-    "x-portkey-mode": "proxy openai",
-    "x-portkey-trace-id": "langchain_agent",
-    "x-portkey-metadata": JSON.stringify({
-        "_environment": "production",
-        "_user": "userid123",
-        "_organisation": "orgid123",
-        "_prompt": "langchain_agent",
-        "foo": "abc",
-        "bar": "def"
-    }),
-    "x-portkey-retry-count":"5",
-    "x-portkey-cache": "semantic",
-    "x-portkey-cache-refresh": "True",
-    "Cache-Control" : "max-age:1729" 	
+async function main() {
+  const res = await model.call("Describe the world as written by Herodotus.");
+  console.log(res);
 }
-
-llm = OpenAI(temperature=0.9, headers=portkey_headers)
-
-print(llm("Two roads diverged in the yellow woods"))
+main();
 ```
 
 ## Conclusion
